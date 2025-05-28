@@ -1,3 +1,24 @@
+
+const btnAddBook = document.querySelector(".btnAddBook");
+const btnRead = document.querySelector(".btnRead");
+const btnRemove = document.querySelector(".btnRemove");
+
+btnAddBook.addEventListener( "click", () => {
+  console.log("btnAddBook works");
+})
+
+btnRead.addEventListener("click", () => {
+  console.log("btnRead works");
+})
+
+btnRemove.addEventListener("click", () => {
+  console.log("btnRemove works");
+})
+
+
+
+
+
 const myLibrary = [];
 
 function Book(title, author, pages, read) {
@@ -26,29 +47,31 @@ function addBookToLibrary(obj) {
 for (let i = 0; i < myLibrary.length; i++) {
   console.log(myLibrary[i].title);
 }
-let count = 5;
-while (count > 0) {
-  let title = prompt("Enter title of book: ");
-  let author = prompt("Enter name of author: ");
-  let pages = prompt("Enter total number of pages: ");
-  console.log(`pages typeof: ${typeof pages} `);
-  pages = parseInt(pages, 10);
-  console.log(`pages typeof: ${typeof pages} `);
-  let read = prompt("Did you read the book? Enter true/false");
 
-  console.log(
-    `user input: title: ${title} author: ${author} pages: ${pages} read: ${read}`
-  );
 
-  const book = new Book(title, author, pages, read);
-  addBookToLibrary(book);
-  count--;
+// let count = 5;
+// while (count > 0) {
+//   let title = prompt("Enter title of book: ");
+//   let author = prompt("Enter name of author: ");
+//   let pages = prompt("Enter total number of pages: ");
+//   console.log(`pages typeof: ${typeof pages} `);
+//   pages = parseInt(pages, 10);
+//   console.log(`pages typeof: ${typeof pages} `);
+//   let read = prompt("Did you read the book? Enter true/false");
 
-}
+//   console.log(
+//     `user input: title: ${title} author: ${author} pages: ${pages} read: ${read}`
+//   );
 
-myLibrary.forEach((book, index) => {
-    console.log(`Book Nr.${index} ${book.title} ${book.author} ${book.pages} ${book.read} ${book.id}`);
-});
+//   const book = new Book(title, author, pages, read);
+//   addBookToLibrary(book);
+//   count--;
+
+// }
+
+// myLibrary.forEach((book, index) => {
+//     console.log(`Book Nr.${index} ${book.title} ${book.author} ${book.pages} ${book.read} ${book.id}`);
+// });
 
 console.log("Should be five books in array. Quit Program! Have a nice day!");
 console.log("Over and out");
