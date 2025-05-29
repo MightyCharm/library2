@@ -2,9 +2,19 @@
 const btnAddBook = document.querySelector(".btnAddBook");
 const btnRead = document.querySelector(".btnRead");
 const btnRemove = document.querySelector(".btnRemove");
+const btnCloseModal = document.querySelector("#btnCloseModal");
+const btnSubmitModal = document.querySelector("#btnSubmitModal");
+
+const modalWindow = document.querySelector("#modal");
+const inputTitle = document.querySelector("#title");
+const inputAuthor = document.querySelector("#author");
+const inputPages = document.querySelector("#pages");
+
+const NUMBER_MAX_LENGTH = 30;
 
 btnAddBook.addEventListener( "click", () => {
   console.log("btnAddBook works");
+  modalWindow.showModal();
 })
 
 btnRead.addEventListener("click", () => {
@@ -14,6 +24,27 @@ btnRead.addEventListener("click", () => {
 btnRemove.addEventListener("click", () => {
   console.log("btnRemove works");
 })
+
+btnCloseModal.addEventListener("click", () => {
+  console.log("btnCloseModal");
+  modalWindow.close();
+})
+
+btnSubmitModal.addEventListener("click", () => {
+  modalWindow.close();
+  inputTitle.value = "";
+  inputAuthor.value = "";
+  inputPages.value = "";
+})
+
+
+inputPages.addEventListener("input", (event) => {
+  // 1. check that if user enters page number of book, this number isn't to long
+  if(event.target.value.length > NUMBER_MAX_LENGTH) {
+    event.target.value = event.target.value.slice(0, NUMBER_MAX_LENGTH);
+  }
+})
+
 
 
 

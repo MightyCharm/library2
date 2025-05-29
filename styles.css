@@ -64,6 +64,75 @@ header {
     border: 1px solid grey;
 }
 
+.modal {
+    width: 400px;
+    height: 300px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    border-radius: 4px;
+    padding: 1rem;
+    border: none;
+    color: var(--on-primary-color);
+    background-color: var(--primary-color);
+}
+
+.modal::backdrop {
+    background-color: hsla(0, 0%, 50%, 0.9);
+}
+
+.modal-content {
+    display: grid;
+    grid-template-rows: 0.5fr 5fr 0.5fr;
+    
+    height: 100%;
+    width: 100%;  
+}
+
+.modal-content-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    
+    width: 100%;
+}
+
+.modal-content-header p {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.modal-content-header button {
+    width: 20%;
+    justify-self: end;
+    border: 1px solid hsl(0, 0%, 50%);
+}
+
+.modal-content form {
+    display: grid;
+}
+
+/* first three divs for input modal window */
+.modal-content form div:nth-child(1),
+.modal-content form div:nth-child(2),
+.modal-content form div:nth-child(3) {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    align-items: center;
+}
+
+/* last div for input modal window */
+.modal-content form div:last-child {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    align-items: center;
+}
+
+.btnSubmitModal {
+
+}
+
+
 main {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
