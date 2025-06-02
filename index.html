@@ -24,21 +24,19 @@
               <button id="btnCloseModal" class="btn btnCloseModal">X</button>
             </div>
             <form method="dialog">
-              <div>
+              <div class="modal-div-title">
                 <label for="title">Title</label>
-                <input id="title" type="text" maxlength="20" >
+                <input id="title" type="text" maxlength="20">
               </div>
-              <div>
-                <!-- label and input author -->
+              <div class="modal-div-author">
                 <label for="author">Author</label>
-                <input id="author" type="text" maxlength="20" >
+                <input id="author" type="text" maxlength="20">
               </div>
-              <div>
-                <!-- label and input for pages -->
+              <div class="modal-div-pages">
                 <label for="pages">Pages</label>
-                <input id="pages" type="number" >
+                <input id="pages" type="number">
               </div>
-              <div>
+              <div class="modal-div-read">
                 <p>already read?</p>
                 <div>
                   <input id="radio-read-true" name="read" type="radio" value="true" >
@@ -49,8 +47,8 @@
                   <label for="radio-read-false">No</label>
                 </div>
               </div>
+               <button id="btnSubmitModal" class="btn btnSubmitModal">Submit</button>
             </form>
-            <button id="btnSubmitModal" class="btn btnSubmitModal">Submit</button>
           </div>
         </dialog>
       </header>
