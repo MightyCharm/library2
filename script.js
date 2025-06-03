@@ -20,7 +20,6 @@ btnAddBook.addEventListener( "click", () => {
   modalWindow.showModal();
 })
 
-
 btnCloseModal.addEventListener("click", () => {
   console.log("btnCloseModal");
   modalWindow.close();
@@ -45,7 +44,7 @@ const myLibrary = [];
 
 // constructor function for creating book objects
 function Book(title, author, pages, read) {
-  // console.log("Inside constructor");
+  console.log("Inside constructor");
   if (!new.target) {
     throw Error("You must use the 'new' operator to call the constructor");
   }
@@ -82,6 +81,7 @@ const clearCards = () => {
 }
 
 // create function that loops through array and displays books as cards
+// called from main/removeCards
 const displayCards = () => {
   console.log("function createCards()");
   // iterate through array and call createCard for every book object to create a card
@@ -91,15 +91,31 @@ const displayCards = () => {
   })
 }
 
+// remove card from library array and from gui
+const removeCardFromDataGUI = (id) => {
+  console.log("removeCard()");
+  console.log(id);
+  console.log("length myLibrary: " + myLibrary.length);
+  // remove card from dataset
+  for(let i = 0; i < myLibrary.length; i++) {
+    console.log("Inside for loop");
+    console.log(myLibrary[i].id + " : " + id);
+    if(myLibrary[i].id === id) {
+      myLibrary.splice(i, 1);
+    }
+  }
+  const card = document.getElementById(id);
+  cardContainer.removeChild(card);
+};
+
 // called from function displayCards to create a card for every book object
 const createCard = (book) => {
   console.log("function createCard()");
-  console.log(book.title);
-
   // create card
   //div class="card" main container
   const divCard = document.createElement("div");
   divCard.classList.add("card");
+  divCard.id = book.id;
   
   // create div for title
   const divTitle = document.createElement("div");
@@ -132,7 +148,7 @@ const createCard = (book) => {
   const divRead = document.createElement("div");
   const pRead = document.createElement("p");
   const btnRead = document.createElement("button");
-  pRead.textContent = `${book.read ? "already read" : "not read"}`;
+  pRead.textContent = `${book.read === "yes" ? "already read" : "not read"}`;
   btnRead.textContent = "READ";
   btnRead.classList.add("btn");
   btnRead.classList.add("btnRead");
@@ -160,8 +176,11 @@ const createCard = (book) => {
     console.log("btnRead works");
   })
 
-  btnRemove.addEventListener("click", () => {
-    console.log("btnRemove works");
+  btnRemove.addEventListener("click", (e) => {
+    const cardId = e.target.closest(".card").id;
+    removeCardFromDataGUI(cardId);
+    // console.log(cardId);
+    
   })
 }
 
@@ -177,14 +196,12 @@ const getUserInput = () => {
   inputData.author = inputAuthor.value;
   inputData.pages = inputPages.value;
   inputData.read = getRadioBtnValueModal();
-  
   console.log(`date get from modal: title: ${inputData.title} - author: ${inputData.author} - pages: ${inputData.pages} - read: ${inputData.read};`)
-  console.log("validate input");
+ 
   const checkInputTitle = inputData.title !== "";
   const checkInputAuthor = inputData.author !== "";
   const checkInputPages = inputData.pages !== "";
   if(checkInputTitle && checkInputAuthor && checkInputPages) {
-    console.log("Everything was entered, return obj containing input");
     return inputData;
   }
   if(checkInputTitle === false) {
@@ -216,6 +233,7 @@ const resetModal = () => {
   radioBtnFalse.checked = true;
 }
 
+
 // main function should be the head of all functions because it was to
 // confusing...
 // main function called:
@@ -223,7 +241,6 @@ const resetModal = () => {
 const main = () => {
   console.log("main()");
   const input = getUserInput();
-  console.log(`input: ${input} typeof: ${typeof input}`);
   // if user entered data correct
   if(input !== false) { 
     resetModal();
