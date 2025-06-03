@@ -16,12 +16,12 @@
       <header>
         <h1>Library 2.0</h1>
 
-        <button class="btn btnAddBook">New Book</button>
+        <button class="btn btnAddBook" data-action="newBook">New Book</button>
         <dialog id="modal" class="modal">
           <div class="modal-content">
             <div class="modal-content-header">
               <p>Add new book to library</p>
-              <button id="btnCloseModal" class="btn btnCloseModal">X</button>
+              <button id="btnCloseModal" class="btn btnCloseModal" data-action="closeModal">X</button>
             </div>
             <form method="dialog">
               <div class="modal-div-title">
@@ -47,7 +47,7 @@
                   <label for="radio-read-false">No</label>
                 </div>
               </div>
-               <button id="btnSubmitModal" class="btn btnSubmitModal">Submit</button>
+               <button id="btnSubmitModal" class="btn btnSubmitModal" data-action="submitModal">Submit</button>
             </form>
           </div>
         </dialog>
