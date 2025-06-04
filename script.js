@@ -88,7 +88,7 @@ const displayCards = () => {
 }
 
 // remove card from library array and from gui
-const removeCardFromDataGUI = (id) => {
+const removeCardFromData = (id) => {
   console.log("removeCardFromDataGUI()");
   // remove card from dataset
   for(let i = 0; i < myLibrary.length; i++) {
@@ -96,15 +96,14 @@ const removeCardFromDataGUI = (id) => {
       myLibrary.splice(i, 1);
     }
   }
-  const card = document.getElementById(id);
-  cardContainer.removeChild(card);
+  // const card = document.getElementById(id);
+  // cardContainer.removeChild(card);
 };
 
 // called from function displayCards to create a card for every book object
 const createCard = (book) => {
   console.log("createCard()");
   // create card
-  //div class="card" main container
   const divCard = document.createElement("div");
   divCard.classList.add("card");
   divCard.id = book.id;
@@ -139,14 +138,15 @@ const createCard = (book) => {
   // create div for read
   const divRead = document.createElement("div");
   const pRead = document.createElement("p");
-  const btnRead = document.createElement("button");
-  pRead.textContent = `${book.read === "yes" ? "already read" : "not read"}`;
-  btnRead.textContent = "READ";
-  btnRead.classList.add("btn");
-  btnRead.classList.add("btnRead");
-  btnRead.dataset.action = "readBook";
+  const btnProgress = document.createElement("button");
+  btnProgress.textContent = "Progress";
+  btnProgress.classList.add("btn");
+  btnProgress.classList.add("btnProgress");
+  btnProgress.dataset.action = "readProgress";
+  // pRead.textContent = `${book.read === "yes" ? "not read yet" : "done"}`;
+  pRead.textContent = setParaTextProgress(book);
+  divRead.appendChild(btnProgress);
   divRead.appendChild(pRead);
-  divRead.appendChild(btnRead);
 
   // create button remove)
   const btnRemove = document.createElement("button");
@@ -165,8 +165,8 @@ const createCard = (book) => {
   cardContainer.appendChild(divCard);
 
   // append eventlistener to button
-  btnRead.addEventListener("click", (event) => {
-    console.log("btnRead.addEventListener()");
+  btnProgress.addEventListener("click", (event) => {
+    console.log("btnProgress.addEventListener()");
     main(event);
   })
 
@@ -174,6 +174,12 @@ const createCard = (book) => {
     console.log("btnRemove.addEventListener()");
     main(event);
   })
+}
+
+// called from createCard()
+const setParaTextProgress = (book) => {
+  console.log("setParaTextProgress()");
+  return book.read === "yes" ? "not read yet" : "done";
 }
 
 const getUserInput = () => {
@@ -250,12 +256,65 @@ const main = (event) => {
     resetModal();
     modalWindow.close();
   }
-  else if(action === "readBook") {
-    console.log("readBook was clicked");
+  else if(action === "readProgress") {
+    console.log("readProgress was clicked");
+    console.log(event)
+    // get button that was clicked and parent and main container
+    const button = event.target;
+    const divParent = button.parentElement;
+    const divCard = divParent.parentElement;
+    // call function with id of card to change read progress inside the object
+    setProgress(divCard.id);
+    displayCards();
   }
   else if(action === "removeBook") {
     console.log("removeBook was clicked");
     const cardId = event.target.closest(".card").id;
-    removeCardFromDataGUI(cardId);
+    removeCardFromData(cardId);
+    displayCards();
   }
 }
+
+// changes read status inside object
+const setProgress = (id) => {
+  console.log("setProgress()");
+  myLibrary.forEach( (book) => {
+    // console.log(book.id === id);
+    if(book.id === id) {
+      console.log(book);
+      console.log(book.read);
+      if(book.read === "yes") {
+        book.read = "no";
+      }
+      else {
+        book.read = "yes";
+      }
+    }
+  })
+}
+
+
+
+
+
+
+
+
+//==================================================================
+// create one card so i don't have to every time -.-'
+const createOneCardDeleteLater = () => {
+  console.log("createOneCardDeleteLater()");
+  
+  // const book = new Book(obj.title, obj.author, obj.pages, obj.read);
+  // addBookToLibrary(book);
+  const obj = {
+    title: "Harry Potter XX",
+    author: "JK Rowling",
+    pages: 334,
+    read: "yes",
+  }
+  createBook(obj);
+  displayCards();
+}
+
+createOneCardDeleteLater();
