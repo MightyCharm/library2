@@ -56,6 +56,7 @@ header {
 
     color: var(--on-primary-color);
     background-color: var(--primary-color);
+    border-bottom: 1px solid white;
 }
 
 .btnAddBook {
@@ -124,6 +125,28 @@ header {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
+}
+
+.modal-div-btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 10px;
+    align-items: end;
+}
+
+.btnSubmitModal,
+.btnCancelModal {
+    height: 70%;
+    width: 80%;
+    
+}
+
+.btn-SubmitModal {
+    justify-self: start;
+}
+
+.btnCancelModal {
+    justify-self: end;
 }
 
 
@@ -197,11 +220,29 @@ footer h3 {
 footer ul {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    list-style-type: none;
+    list-style-type: none
+
 }
+
+footer ul li {
+    min-width: 130px;
+    display: grid;
+    justify-items: start;
+    /* border: 1px solid red; */
+}
+footer ul li:nth-child(2),
+footer ul li:nth-child(3),
+footer ul li:nth-child(4) {
+    /* background-color: rgb(68, 23, 31); */
+    display: grid;
+    justify-items: center;
+    
+}
+
 
 footer ul span {
     padding-left: 5px;
+    /* border: 1px solid red; */
 }
 
 footer p {

@@ -4,6 +4,7 @@ const btnAddBook = document.querySelector(".btnAddBook");
 const modalWindow = document.querySelector("#modal");
 const btnCloseModal = document.querySelector("#btnCloseModal");
 const btnSubmitModal = document.querySelector("#btnSubmitModal");
+const btnCancelModal = document.querySelector("#btnCancelModal");
 const inputTitle = document.querySelector("#title");
 const inputAuthor = document.querySelector("#author");
 const inputPages = document.querySelector("#pages");
@@ -25,6 +26,11 @@ btnCloseModal.addEventListener("click", (event) => {
 
 btnSubmitModal.addEventListener("click", (event) => {
   console.log("btnSubmitModal.addEventListener()");
+  event.preventDefault();
+  main(event)
+})
+
+btnCancelModal.addEventListener("click", (event) => {
   event.preventDefault();
   main(event)
 })
@@ -241,6 +247,11 @@ const main = (event) => {
     console.log("newBook was clicked");
     modalWindow.showModal();
   }
+  else if(action === "closeModal" || action === "cancelModal") {
+    console.log("closeModal/cancelModal was clicked");
+    resetModal();
+    modalWindow.close();
+  }
   else if(action === "submitModal") {
     console.log("submitModal was clicked");
     const input = getUserInput();
@@ -250,11 +261,6 @@ const main = (event) => {
       createBook(input);
       displayCards();
     }
-  }
-  else if(action === "closeModal") {
-    console.log("closeModal was clicked");
-    resetModal();
-    modalWindow.close();
   }
   else if(action === "readProgress") {
     console.log("readProgress was clicked");
