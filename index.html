@@ -18,39 +18,42 @@
 
         <button class="btn btnAddBook" data-action="newBook">New Book</button>
         <dialog id="modal" class="modal">
-          <div class="modal-content">
-            <div class="modal-content-header">
+          <div class="modalContent">
+            <div class="modalContentHeader">
               <p>Add new book to library</p>
               <button id="btnCloseModal" class="btn btnCloseModal" data-action="closeModal">X</button>
             </div>
             <form method="dialog">
-              <div class="modal-div-title">
+
+              <div class="modalDivTitle">
                 <label for="title">Title</label>
                 <input id="title" type="text" maxlength="20">
               </div>
-              <div class="modal-div-author">
+
+              <div class="modalDivAuthor">
                 <label for="author">Author</label>
                 <input id="author" type="text" maxlength="20">
               </div>
-              <div class="modal-div-pages">
+
+              <div class="modalDivPages">
                 <label for="pages">Pages</label>
                 <input id="pages" type="number">
               </div>
-              <div class="modal-div-read">
-                <p>already read?</p>
-                <div>
-                  <input id="radio-read-true" name="read" type="radio" value="yes" >
-                  <label for="radio-read-true">Yes</label>
-                </div>
-                <div>
-                  <input id="radio-read-false" name="read" type="radio" value="no" checked>
-                  <label for="radio-read-false">No</label>
-                </div>
+
+              <div class="modalDivRead">
+                <label for="selectBookProgress">Book read?</label>
+                <select id="selectBookProgress" class="selectBookProgress" name="selectBookProgress">
+                  <option value="notYetRead" selected>not yet read</option>
+                  <option value="inProgress">in progress</option>
+                  <option value="finished">finished</option>
+                </select>
               </div>
-              <div class="modal-div-btns">
+
+              <div class="modalDivBtns">
                 <button id="btnSubmitModal" class="btn btnSubmitModal" data-action="submitModal">Submit</button>
                 <button id="btnCancelModal" class="btn btnCancelModal" data-action="cancelModal">Cancel</button>
               </div>
+
             </form>
           </div>
         </dialog>
@@ -58,8 +61,8 @@
 
       <main>
         <!-- append cards (books created) -->
-         <div id="card-container" class="card-container">
-          <div class="card">
+         <div id="cardContainer" class="cardContainer">
+          <!-- <div class="card">
            
             <div> 
               <p>Title:</p>
@@ -82,7 +85,7 @@
             </div>
 
             <button class="btn btnRemove">REMOVE</button>
-          </div>
+          </div> -->
         </div>
       </main>
 

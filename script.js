@@ -8,10 +8,9 @@ const btnCancelModal = document.querySelector("#btnCancelModal");
 const inputTitle = document.querySelector("#title");
 const inputAuthor = document.querySelector("#author");
 const inputPages = document.querySelector("#pages");
-const radioBtnFalse = document.querySelector("#radio-read-false");
-const radioBtnsRead = document.getElementsByName("read");
+const selectBookProgress = document.querySelector("#selectBookProgress");
 // grab container for cards so cards can be appended later
-const cardContainer = document.querySelector("#card-container");
+const cardContainer = document.querySelector("#cardContainer");
 
 // opens modal window
 btnAddBook.addEventListener( "click", (event) => {
@@ -50,7 +49,7 @@ const myLibrary = [];
 
 // constructor function for creating book objects
 function Book(title, author, pages, read) {
-  console.log("function Book(constructor)");
+  console.log("function Book(title, author, pages, read)");
   if (!new.target) {
     throw Error("You must use the 'new' operator to call the constructor");
   }
@@ -60,8 +59,18 @@ function Book(title, author, pages, read) {
   this.read = read;
   this.id = self.crypto.randomUUID();
   this.info = function () {
-    return `${this.title} by ${this.author}, ${this.pages} pages ${this.read ? "already read" : "not read yet"} id: ${this.id} `;
+    return `Book Object Info: ${this.title} by ${this.author}, ${this.pages} pages ${this.read} id: ${this.id} `;
   };
+}
+
+// should change read status of object (data)
+Book.prototype.updateRead = function(progress) {
+  console.log("Book.prototype.updateRead (changes this.read in object)");
+  console.log(this.read);
+  this.read = progress;
+  console.log(this.read);
+  console.log("====>");
+  console.log(this.title, this.author, this.pages , this.read)
 }
 
 // function adds book objects to library
@@ -70,41 +79,11 @@ function addBookToLibrary(obj) {
   myLibrary.push(obj);
 }
 
-const createBook = ( (obj) => {
-  console.log("createBook()")
-  const book = new Book(obj.title, obj.author, obj.pages, obj.read);
+const createBookObj = ( (input) => {
+  console.log("createBookObj()")
+  const book = new Book(input.title, input.author, input.pages, input.read);
   addBookToLibrary(book);
 })
-
-
-// create function that loops through array and displays books as cards
-// called from main/removeCards
-const displayCards = () => {
-  console.log("displayCards()");
-  // first clear GUI from all cards
-  const cards = document.querySelectorAll(".card");
-  cards.forEach((card) => {
-    card.remove();
-  })
-  // iterate through array and call createCard for every book object to create a card
-  myLibrary.forEach( (book) => {
-    // call function to create a card
-    createCard(book)
-  })
-}
-
-// remove card from library array and from gui
-const removeCardFromData = (id) => {
-  console.log("removeCardFromDataGUI()");
-  // remove card from dataset
-  for(let i = 0; i < myLibrary.length; i++) {
-    if(myLibrary[i].id === id) {
-      myLibrary.splice(i, 1);
-    }
-  }
-  // const card = document.getElementById(id);
-  // cardContainer.removeChild(card);
-};
 
 // called from function displayCards to create a card for every book object
 const createCard = (book) => {
@@ -143,18 +122,46 @@ const createCard = (book) => {
   
   // create div for read
   const divRead = document.createElement("div");
-  const pRead = document.createElement("p");
-  const btnProgress = document.createElement("button");
-  btnProgress.textContent = "Progress";
-  btnProgress.classList.add("btn");
-  btnProgress.classList.add("btnProgress");
-  btnProgress.dataset.action = "readProgress";
-  // pRead.textContent = `${book.read === "yes" ? "not read yet" : "done"}`;
-  pRead.textContent = setParaTextProgress(book);
-  divRead.appendChild(btnProgress);
-  divRead.appendChild(pRead);
+  const labelSelect = document.createElement("label");
+  const select = document.createElement("select");
+  const option1 = document.createElement("option");
+  const option2 = document.createElement("option");
+  const option3 = document.createElement("option");
+  labelSelect.htmlFor = "cardSelect";
+  labelSelect.textContent = "Book read?";
+  select.id = "cardSelect";
+  select.classList.add("cardSelect");
+  select.name = "progress";
+  select.dataset.action = "selectProgress";
+  option1.value = "notYetRead";
+  option2.value = "inProgress";
+  option3.value = "finished";
+  option1.text = "not yet read";
+  option2.text = "in progress";
+  option3.text = "finished";
+  // use data to change gui
+  switch(book.read) {
+    case "notYetRead":
+      option1.selected = true;
+      break;
+    case "inProgress":
+      option2.selected = true;
+      break;
+    case "finished":
+      option3.selected = true;
+      break;
+    default:
+      console.log("Error: something went wrong in switch statement");
+      break;
+  }
 
-  // create button remove)
+  select.appendChild(option1);
+  select.appendChild(option2);
+  select.appendChild(option3);
+  divRead.appendChild(labelSelect);
+  divRead.appendChild(select);
+
+  // create button remove
   const btnRemove = document.createElement("button");
   btnRemove.textContent = "REMOVE";
   btnRemove.classList.add("btn");
@@ -170,37 +177,65 @@ const createCard = (book) => {
   // append divCard to cardContainer
   cardContainer.appendChild(divCard);
 
-  // append eventlistener to button
-  btnProgress.addEventListener("click", (event) => {
-    console.log("btnProgress.addEventListener()");
+  select.addEventListener("change", (event) => {
+    console.log("select.addEventListener()");
     main(event);
   })
 
+  // append eventlistener to button
   btnRemove.addEventListener("click", (event) => {
     console.log("btnRemove.addEventListener()");
     main(event);
   })
 }
 
-// called from createCard()
-const setParaTextProgress = (book) => {
-  console.log("setParaTextProgress()");
-  return book.read === "yes" ? "not read yet" : "done";
+// create function that loops through array and displays books as cards
+// called from main/removeCards
+const displayCards = () => {
+  console.log("displayCards()");
+  // first clear GUI from all cards
+  const cards = document.querySelectorAll(".card");
+  cards.forEach((card) => {
+    card.remove();
+  })
+  // iterate through array and call createCard for every book object to create a card
+  myLibrary.forEach( (book) => {
+    // call function to create a card
+    createCard(book)
+  })
 }
+
+// remove card from library array and from gui
+const removeCardFromData = (id) => {
+  console.log("removeCardFromDataGUI()");
+  // remove card from dataset
+  for(let i = 0; i < myLibrary.length; i++) {
+    if(myLibrary[i].id === id) {
+      myLibrary.splice(i, 1);
+    }
+  }
+};
+
+const getBookObject = (id) => {
+  console.log("getBookObject");
+  for(let i= 0; i < myLibrary.length; i++) {
+    if(myLibrary[i].id === id) {
+      console.log("object found");
+      return myLibrary[i];
+    }
+  }
+  
+}
+
 
 const getUserInput = () => {
   console.log("getUserInput()");
   const inputData = {
-    title: undefined,
-    author: undefined,
-    pages: undefined,
-    read: undefined
+    title: inputTitle.value,
+    author: inputAuthor.value,
+    pages: inputPages.value,
+    read: selectBookProgress.value
   }
-  inputData.title = inputTitle.value;
-  inputData.author = inputAuthor.value;
-  inputData.pages = inputPages.value;
-  inputData.read = getRadioBtnValueModal();
-  // console.log(`date get from modal: title: ${inputData.title} - author: ${inputData.author} - pages: ${inputData.pages} - read: ${inputData.read};`)
  
   const checkInputTitle = inputData.title !== "";
   const checkInputAuthor = inputData.author !== "";
@@ -220,29 +255,19 @@ const getUserInput = () => {
   return false;
 }
 
-// checks which radio button in modal window is selected, called from getUserInput();
-const getRadioBtnValueModal = () => {
-  console.log("getRadioBtnValueModal()");
-  for(let i=0; i< radioBtnsRead.length; i++) {
-    if (radioBtnsRead[i].checked) {
-      return radioBtnsRead[i].value;
-    }
-  }
-}
 
 const resetModal = () => {
   console.log("resetModal()");
   inputTitle.value = "";
   inputAuthor.value = "";
   inputPages.value = "";
-  radioBtnFalse.checked = true;
+  selectBookProgress.options[0].selected = true;
 }
 
 // gets called from all eventlistener
 const main = (event) => {
   console.log("main function()");
   const action = event.target.getAttribute("data-action");
-  console.log(action);
   if(action === "newBook") {
     console.log("newBook was clicked");
     modalWindow.showModal();
@@ -254,23 +279,23 @@ const main = (event) => {
   }
   else if(action === "submitModal") {
     console.log("submitModal was clicked");
-    const input = getUserInput();
-    if(input !== false) { 
+    const inputObj = getUserInput();
+    if(inputObj !== false) { 
       resetModal();
       modalWindow.close();
-      createBook(input);
+      createBookObj(inputObj);
       displayCards();
     }
   }
-  else if(action === "readProgress") {
-    console.log("readProgress was clicked");
-    console.log(event)
-    // get button that was clicked and parent and main container
-    const button = event.target;
-    const divParent = button.parentElement;
-    const divCard = divParent.parentElement;
-    // call function with id of card to change read progress inside the object
-    setProgress(divCard.id);
+
+  // this option need overhaul
+  else if(action === "selectProgress") {
+    console.log("selectProgress was clicked");
+    console.log(event.target.value);
+    const progress = event.target.value;
+    const cardId = event.target.closest(".card").id;
+    const book = getBookObject(cardId);
+    book.updateRead(progress);
     displayCards();
   }
   else if(action === "removeBook") {
@@ -281,46 +306,17 @@ const main = (event) => {
   }
 }
 
-// changes read status inside object
-const setProgress = (id) => {
-  console.log("setProgress()");
-  myLibrary.forEach( (book) => {
-    // console.log(book.id === id);
-    if(book.id === id) {
-      console.log(book);
-      console.log(book.read);
-      if(book.read === "yes") {
-        book.read = "no";
-      }
-      else {
-        book.read = "yes";
-      }
-    }
-  })
-}
 
-
-
-
-
-
-
-
-//==================================================================
-// create one card so i don't have to every time -.-'
 const createOneCardDeleteLater = () => {
   console.log("createOneCardDeleteLater()");
-  
-  // const book = new Book(obj.title, obj.author, obj.pages, obj.read);
-  // addBookToLibrary(book);
-  const obj = {
-    title: "Harry Potter XX",
-    author: "JK Rowling",
-    pages: 334,
-    read: "yes",
+  const inputData = {
+    title: "Lord of the Rings",
+    author: "J.R.R. Tolkien",
+    pages: 2002,
+    read: "inProgress"
   }
-  createBook(obj);
+  createBookObj(inputData);
   displayCards();
 }
 
-createOneCardDeleteLater();
+createOneCardDeleteLater()
