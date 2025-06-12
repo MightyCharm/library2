@@ -14,17 +14,14 @@ const cardContainer = document.querySelector("#cardContainer");
 
 // opens modal window
 btnAddBook.addEventListener( "click", (event) => {
-  console.log("btnAddBook.addEventListener()");
   main(event);
 })
 
 btnCloseModal.addEventListener("click", (event) => {
-  console.log("btnCloseModal.addEventListener()");
   main(event);
 })
 
 btnSubmitModal.addEventListener("click", (event) => {
-  console.log("btnSubmitModal.addEventListener()");
   event.preventDefault();
   main(event)
 })
@@ -34,14 +31,10 @@ btnCancelModal.addEventListener("click", (event) => {
   main(event)
 })
 
-// prevents that number input doesn't get to long
-inputPages.addEventListener("input", (event) => {
-  console.log("inputPages.addEventListener()");
-  const NUMBER_MAX_LENGTH = 30;
-  // 1. check that if user enters page number of book, this number isn't to long
-  if(event.target.value.length > NUMBER_MAX_LENGTH) {
-    event.target.value = event.target.value.slice(0, NUMBER_MAX_LENGTH);
-  }
+// prevents that number input gets to long
+inputPages.addEventListener("input", (event) => { 
+  validateInputPages(event);
+
 })
 
 // initialize variable with an empty array
@@ -49,7 +42,6 @@ const myLibrary = [];
 
 // constructor function for creating book objects
 function Book(title, author, pages, read) {
-  console.log("function Book(title, author, pages, read)");
   if (!new.target) {
     throw Error("You must use the 'new' operator to call the constructor");
   }
@@ -63,31 +55,102 @@ function Book(title, author, pages, read) {
   };
 }
 
-// should change read status of object (data)
 Book.prototype.updateRead = function(progress) {
-  console.log("Book.prototype.updateRead (changes this.read in object)");
-  console.log(this.read);
+  console.log("Book.prototype.updateRead = function(progress)");
   this.read = progress;
-  console.log(this.read);
-  console.log("====>");
   console.log(this.title, this.author, this.pages , this.read)
 }
 
 // function adds book objects to library
 function addBookToLibrary(obj) {
-  console.log("addBookToLibrary()")
   myLibrary.push(obj);
 }
 
 const createBookObj = ( (input) => {
-  console.log("createBookObj()")
   const book = new Book(input.title, input.author, input.pages, input.read);
   addBookToLibrary(book);
 })
 
-// called from function displayCards to create a card for every book object
+const validateInputPages = (event) => {
+  console.log("validateInputPages()");
+  // prevent that input starts with a 0
+  if(event.target.value.startsWith('0')) {
+    inputPages.value = event.target.value.substring(1);
+  }
+  
+
+  //const position = event.target.selectionStart;
+  // prevent that non digits are entered
+  inputPages.value = event.target.value.replace(/[^0-9]/g, "");
+
+}
+
+const getUserInput = () => {
+  const inputData = {
+    title: inputTitle.value,
+    author: inputAuthor.value,
+    pages: inputPages.value,
+    read: selectBookProgress.value
+  }
+ 
+  const checkInputTitle = inputData.title !== "";
+  const checkInputAuthor = inputData.author !== "";
+  const checkInputPages = inputData.pages !== "";
+  if(checkInputTitle && checkInputAuthor && checkInputPages) {
+    return inputData;
+  }
+  if(checkInputTitle === false) {
+    console.log("Enter something into title input");
+  }
+  if(checkInputAuthor === false) {
+    console.log("Enter something into author input");
+  }
+  if(checkInputPages === false) {
+    console.log("Enter something into pages input");
+  }
+  return false;
+}
+
+const removeCardFromData = (id) => {
+  // remove card from dataset
+  for(let i = 0; i < myLibrary.length; i++) {
+    if(myLibrary[i].id === id) {
+      myLibrary.splice(i, 1);
+    }
+  }
+};
+
+const getBookObject = (id) => {
+  for(let i= 0; i < myLibrary.length; i++) {
+    if(myLibrary[i].id === id) {
+      return myLibrary[i];
+    }
+  }
+}
+
+const resetModal = () => {
+  inputTitle.value = "";
+  inputAuthor.value = "";
+  inputPages.value = "";
+  selectBookProgress.options[0].selected = true;
+}
+
+// creates cards from objects
+const displayCards = () => {
+  // first clear GUI from all cards
+  const cards = document.querySelectorAll(".card");
+  cards.forEach((card) => {
+    card.remove();
+  })
+  // iterate through array and call createCard for every book object to create a card
+  myLibrary.forEach( (book) => {
+    // call function to create a card
+    createCard(book)
+  })
+}
+
+// called from function displayCards
 const createCard = (book) => {
-  console.log("createCard()");
   // create card
   const divCard = document.createElement("div");
   divCard.classList.add("card");
@@ -97,6 +160,7 @@ const createCard = (book) => {
   const divTitle = document.createElement("div");
   const pTitle = document.createElement("p");
   const pUserTitle = document.createElement("p");
+  divTitle.classList.add("cardDivTitle");
   pTitle.textContent = "Title:";
   pUserTitle.textContent = `${book.title}`;
   divTitle.appendChild(pTitle);
@@ -106,6 +170,7 @@ const createCard = (book) => {
   const divAuthor = document.createElement("div");
   const pAuthor = document.createElement("p");
   const pUserAuthor = document.createElement("p");
+  divAuthor.classList.add("cardDivAuthor");
   pAuthor.textContent = "Author:";
   pUserAuthor.textContent = `${book.author}`;
   divAuthor.appendChild(pAuthor);
@@ -115,6 +180,7 @@ const createCard = (book) => {
   const divPages = document.createElement("div");
   const pPages = document.createElement("p");
   const pUserPages = document.createElement("p");
+  divPages.classList.add("cardDivPages");
   pPages.textContent = "Pages:";
   pUserPages.textContent = `${book.pages}`;
   divPages.appendChild(pPages);
@@ -127,9 +193,10 @@ const createCard = (book) => {
   const option1 = document.createElement("option");
   const option2 = document.createElement("option");
   const option3 = document.createElement("option");
-  labelSelect.htmlFor = "cardSelect";
+  divRead.classList.add("cardDivRead");
+  labelSelect.htmlFor = `cardSelect-${book.id}`;
   labelSelect.textContent = "Book read?";
-  select.id = "cardSelect";
+  select.id = `cardSelect-${book.id}`;
   select.classList.add("cardSelect");
   select.name = "progress";
   select.dataset.action = "selectProgress";
@@ -178,107 +245,26 @@ const createCard = (book) => {
   cardContainer.appendChild(divCard);
 
   select.addEventListener("change", (event) => {
-    console.log("select.addEventListener()");
     main(event);
   })
 
   // append eventlistener to button
   btnRemove.addEventListener("click", (event) => {
-    console.log("btnRemove.addEventListener()");
     main(event);
   })
 }
 
-// create function that loops through array and displays books as cards
-// called from main/removeCards
-const displayCards = () => {
-  console.log("displayCards()");
-  // first clear GUI from all cards
-  const cards = document.querySelectorAll(".card");
-  cards.forEach((card) => {
-    card.remove();
-  })
-  // iterate through array and call createCard for every book object to create a card
-  myLibrary.forEach( (book) => {
-    // call function to create a card
-    createCard(book)
-  })
-}
-
-// remove card from library array and from gui
-const removeCardFromData = (id) => {
-  console.log("removeCardFromDataGUI()");
-  // remove card from dataset
-  for(let i = 0; i < myLibrary.length; i++) {
-    if(myLibrary[i].id === id) {
-      myLibrary.splice(i, 1);
-    }
-  }
-};
-
-const getBookObject = (id) => {
-  console.log("getBookObject");
-  for(let i= 0; i < myLibrary.length; i++) {
-    if(myLibrary[i].id === id) {
-      console.log("object found");
-      return myLibrary[i];
-    }
-  }
-  
-}
-
-
-const getUserInput = () => {
-  console.log("getUserInput()");
-  const inputData = {
-    title: inputTitle.value,
-    author: inputAuthor.value,
-    pages: inputPages.value,
-    read: selectBookProgress.value
-  }
- 
-  const checkInputTitle = inputData.title !== "";
-  const checkInputAuthor = inputData.author !== "";
-  const checkInputPages = inputData.pages !== "";
-  if(checkInputTitle && checkInputAuthor && checkInputPages) {
-    return inputData;
-  }
-  if(checkInputTitle === false) {
-    console.log("Enter something into title input");
-  }
-  if(checkInputAuthor === false) {
-    console.log("Enter something into author input");
-  }
-  if(checkInputPages === false) {
-    console.log("Enter something into pages input");
-  }
-  return false;
-}
-
-
-const resetModal = () => {
-  console.log("resetModal()");
-  inputTitle.value = "";
-  inputAuthor.value = "";
-  inputPages.value = "";
-  selectBookProgress.options[0].selected = true;
-}
-
-// gets called from all eventlistener
+// main function
 const main = (event) => {
-  console.log("main function()");
   const action = event.target.getAttribute("data-action");
   if(action === "newBook") {
-    console.log("newBook was clicked");
     modalWindow.showModal();
   }
   else if(action === "closeModal" || action === "cancelModal") {
-    console.log("closeModal/cancelModal was clicked");
     resetModal();
     modalWindow.close();
   }
   else if(action === "submitModal") {
-    console.log("submitModal was clicked");
     const inputObj = getUserInput();
     if(inputObj !== false) { 
       resetModal();
@@ -288,35 +274,74 @@ const main = (event) => {
     }
   }
 
-  // this option need overhaul
   else if(action === "selectProgress") {
-    console.log("selectProgress was clicked");
-    console.log(event.target.value);
     const progress = event.target.value;
     const cardId = event.target.closest(".card").id;
     const book = getBookObject(cardId);
     book.updateRead(progress);
-    displayCards();
+    // displayCards();
   }
   else if(action === "removeBook") {
-    console.log("removeBook was clicked");
     const cardId = event.target.closest(".card").id;
     removeCardFromData(cardId);
     displayCards();
   }
 }
 
-
-const createOneCardDeleteLater = () => {
-  console.log("createOneCardDeleteLater()");
-  const inputData = {
-    title: "Lord of the Rings",
+/* creating a few examples, so it doesn't look so boring */
+const createExamples = () => {
+  const exampleBook1 = {
+    title: "Lord of the Rings The Fellowship",
     author: "J.R.R. Tolkien",
-    pages: 2002,
+    pages: 1546,
+    read: "notYetRead"
+  }
+  const exampleBook2 = {
+    title: "Lord of the Rings: The two Towers",
+    author: "J.R.R. Tolkien",
+    pages: 1678,
     read: "inProgress"
   }
-  createBookObj(inputData);
+  const exampleBook3 = {
+    title: "Lord of the Rings: Return of the King",
+    author: "J.R.R. Tolkien",
+    pages: 1102,
+    read: "finished"
+  }
+  const exampleBook4 = {
+    title: 1984,
+    author: "George Orwell",
+    pages: 1102,
+    read: "notYetRead"
+  }
+  const exampleBook5 = {
+    title: "Romeo and Juliet",
+    author: "William Shakespeare",
+    pages: 425,
+    read: "inProgress",
+  }
+  const exampleBook6 = {
+    title: "The Count of Monte Christo",
+    author: "Alexandre Dumas",
+    pages: 336,
+    read: "finished",
+  }
+  const exampleBook7 = {
+    title: "It",
+    author: "Stephen King",
+    pages: 500,
+    read: "notYetRead",
+  }
+  createBookObj(exampleBook1);
+  createBookObj(exampleBook2);
+  createBookObj(exampleBook3);
+  createBookObj(exampleBook4);
+  createBookObj(exampleBook5);
+  createBookObj(exampleBook6);
+  createBookObj(exampleBook7);
   displayCards();
 }
+createExamples();
 
-createOneCardDeleteLater()
+
+/* implement media queries */
