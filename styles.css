@@ -191,7 +191,7 @@ main {
     border: 1px solid black;
     font-size: var(--font-size-text-card);
     color: var(--on-secondary-color);
-    background-color: var(--secondary-color);  
+    background-color: var(--secondary-color);
 }
 
 .cardDivTitle,
@@ -200,9 +200,26 @@ main {
 .cardDivRead {
     display: grid;
     align-items: center;
-    padding-left: 10px;
-    grid-template-columns: 1.5fr 3fr;;
+    grid-template-columns: 100px 1fr;
+    padding: 0 10px;
 }
+
+.cardDivTitle,
+.cardDivAuthor,
+.cardDivPages {
+    max-width: 400px;
+    word-wrap: break-word;
+}
+
+.pUserTitle,
+.pUserAuthor,
+.pUserPages {
+    overflow: hidden;
+    background-color: pink;
+   
+}
+   
+
 
 .cardDivTitle,
 .cardDivAuthor,

@@ -160,6 +160,7 @@ const createCard = (book) => {
   const divTitle = document.createElement("div");
   const pTitle = document.createElement("p");
   const pUserTitle = document.createElement("p");
+  pUserTitle.classList.add("pUserTitle"); //====================================== new
   divTitle.classList.add("cardDivTitle");
   pTitle.textContent = "Title:";
   pUserTitle.textContent = `${book.title}`;
@@ -171,6 +172,7 @@ const createCard = (book) => {
   const pAuthor = document.createElement("p");
   const pUserAuthor = document.createElement("p");
   divAuthor.classList.add("cardDivAuthor");
+  pUserAuthor.classList.add("pUserAuthor"); //====================================== new
   pAuthor.textContent = "Author:";
   pUserAuthor.textContent = `${book.author}`;
   divAuthor.appendChild(pAuthor);
@@ -181,6 +183,7 @@ const createCard = (book) => {
   const pPages = document.createElement("p");
   const pUserPages = document.createElement("p");
   divPages.classList.add("cardDivPages");
+  pUserPages.classList.add("pUserPages"); //========================================== new
   pPages.textContent = "Pages:";
   pUserPages.textContent = `${book.pages}`;
   divPages.appendChild(pPages);
