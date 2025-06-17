@@ -37,11 +37,8 @@ inputPages.addEventListener("input", (event) => {
 
 })
 
-// initialize variable with an empty array
-const myLibrary = [];
-
 // constructor function for creating book objects
-function Book(title, author, pages, read) {
+function Book(title, author, pages, read, id) {
   if (!new.target) {
     throw Error("You must use the 'new' operator to call the constructor");
   }
@@ -49,7 +46,12 @@ function Book(title, author, pages, read) {
   this.author = author;
   this.pages = pages;
   this.read = read;
-  this.id = self.crypto.randomUUID();
+  if(id === undefined) {
+    this.id = self.crypto.randomUUID();
+  } else {
+    this.id = id;
+  }
+  
   this.info = function () {
     return `Book Object Info: ${this.title} by ${this.author}, ${this.pages} pages ${this.read} id: ${this.id} `;
   };
@@ -58,12 +60,17 @@ function Book(title, author, pages, read) {
 Book.prototype.updateRead = function(progress) {
   console.log("Book.prototype.updateRead = function(progress)");
   this.read = progress;
-  console.log(this.title, this.author, this.pages , this.read)
+  console.log(this.title, this.author, this.pages , this.read);
+
 }
 
-// function adds book objects to library
+// function adds book objects to array myLibrary
 function addBookToLibrary(obj) {
+  // get library
+  const myLibrary = getLocalStorageData();
   myLibrary.push(obj);
+  // store information
+  storeDataInLocalStorage(myLibrary);
 }
 
 const createBookObj = ( (input) => {
@@ -77,8 +84,6 @@ const validateInputPages = (event) => {
   if(event.target.value.startsWith('0')) {
     inputPages.value = event.target.value.substring(1);
   }
-  
-
   //const position = event.target.selectionStart;
   // prevent that non digits are entered
   inputPages.value = event.target.value.replace(/[^0-9]/g, "");
@@ -111,19 +116,23 @@ const getUserInput = () => {
   return false;
 }
 
-const removeCardFromData = (id) => {
+const removeBookObjectFromData = (id) => {
   // remove card from dataset
+  const myLibrary = getLocalStorageData();
   for(let i = 0; i < myLibrary.length; i++) {
     if(myLibrary[i].id === id) {
       myLibrary.splice(i, 1);
     }
   }
+  storeDataInLocalStorage(myLibrary);
 };
 
 const getBookObject = (id) => {
-  for(let i= 0; i < myLibrary.length; i++) {
-    if(myLibrary[i].id === id) {
-      return myLibrary[i];
+  const myLibrary = getLocalStorageData();
+  const books = myLibrary.map(book => new Book(book.title, book.author, book.pages, book.read, book.id));
+  for(let i=0; i < books.length; i++) {
+    if(books[i].id === id) {
+      return books[i];
     }
   }
 }
@@ -142,10 +151,11 @@ const displayCards = () => {
   cards.forEach((card) => {
     card.remove();
   })
+  const myLibrary = getLocalStorageData();
   // iterate through array and call createCard for every book object to create a card
   myLibrary.forEach( (book) => {
     // call function to create a card
-    createCard(book)
+    createCard(book);
   })
 }
 
@@ -160,7 +170,7 @@ const createCard = (book) => {
   const divTitle = document.createElement("div");
   const pTitle = document.createElement("p");
   const pUserTitle = document.createElement("p");
-  pUserTitle.classList.add("pUserTitle"); //====================================== new
+  pUserTitle.classList.add("pUserTitle");
   divTitle.classList.add("cardDivTitle");
   pTitle.textContent = "Title:";
   pUserTitle.textContent = `${book.title}`;
@@ -172,7 +182,7 @@ const createCard = (book) => {
   const pAuthor = document.createElement("p");
   const pUserAuthor = document.createElement("p");
   divAuthor.classList.add("cardDivAuthor");
-  pUserAuthor.classList.add("pUserAuthor"); //====================================== new
+  pUserAuthor.classList.add("pUserAuthor");
   pAuthor.textContent = "Author:";
   pUserAuthor.textContent = `${book.author}`;
   divAuthor.appendChild(pAuthor);
@@ -183,7 +193,7 @@ const createCard = (book) => {
   const pPages = document.createElement("p");
   const pUserPages = document.createElement("p");
   divPages.classList.add("cardDivPages");
-  pUserPages.classList.add("pUserPages"); //========================================== new
+  pUserPages.classList.add("pUserPages");
   pPages.textContent = "Pages:";
   pUserPages.textContent = `${book.pages}`;
   divPages.appendChild(pPages);
@@ -257,6 +267,30 @@ const createCard = (book) => {
   })
 }
 
+const getLocalStorageData = () => {
+  console.log("getLocalStorageData()");
+  return JSON.parse(localStorage.getItem("myLibrary"));
+
+}
+
+const storeDataInLocalStorage = (value) => {
+  console.log("storeDataInLocalStorage");
+  console.log(Array.isArray(value));
+  if(!Array.isArray(value)) {
+    console.log(`$$ title: ${value.title} author: ${value.author} read: ${value.read} id: ${value.id}`);
+    const myLibrary = getLocalStorageData();
+    for(let i=0; i < myLibrary.length; i++) {
+      if(myLibrary[i].id === value.id) {
+        console.log("book found inside myLibrary");
+        myLibrary[i].read = value.read;
+      }
+    }
+    localStorage.setItem("myLibrary", JSON.stringify(myLibrary));
+  } else {
+    localStorage.setItem("myLibrary", JSON.stringify(value));
+  }
+}
+
 // main function
 const main = (event) => {
   const action = event.target.getAttribute("data-action");
@@ -281,12 +315,17 @@ const main = (event) => {
     const progress = event.target.value;
     const cardId = event.target.closest(".card").id;
     const book = getBookObject(cardId);
+    // console.log(book);
+    // console.log(progress);
     book.updateRead(progress);
-    // displayCards();
+    storeDataInLocalStorage(book);
+    console.log("==================");
+    console.log(getLocalStorageData());
+    console.log("==================");
   }
   else if(action === "removeBook") {
     const cardId = event.target.closest(".card").id;
-    removeCardFromData(cardId);
+    removeBookObjectFromData(cardId);
     displayCards();
   }
 }
@@ -344,7 +383,13 @@ const createExamples = () => {
   createBookObj(exampleBook7);
   displayCards();
 }
-createExamples();
 
+const initializeData = () => {
+  const myLibrary = [];
+  localStorage.setItem("myLibrary", JSON.stringify(myLibrary));
+}
+
+initializeData();
+createExamples();
 
 /* implement media queries */

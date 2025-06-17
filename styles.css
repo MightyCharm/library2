@@ -214,9 +214,7 @@ main {
 .pUserTitle,
 .pUserAuthor,
 .pUserPages {
-    overflow: hidden;
-    background-color: pink;
-   
+    overflow: hidden; 
 }
    
 
