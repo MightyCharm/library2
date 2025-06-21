@@ -1,5 +1,6 @@
-// grab buttons
+// main window
 const btnAddBook = document.querySelector(".btnAddBook");
+const cardContainer = document.querySelector("#cardContainer");
 // modal window
 const modalWindow = document.querySelector("#modal");
 const btnCloseModal = document.querySelector("#btnCloseModal");
@@ -8,34 +9,45 @@ const btnCancelModal = document.querySelector("#btnCancelModal");
 const inputTitle = document.querySelector("#title");
 const inputAuthor = document.querySelector("#author");
 const inputPages = document.querySelector("#pages");
+const errorInputTitle = document.querySelector("#errorInputTitle");
+const errorInputAuthor = document.querySelector("#errorInputAuthor");
+const errorInputPages = document.querySelector("#errorInputPages");
 const selectBookProgress = document.querySelector("#selectBookProgress");
-// grab container for cards so cards can be appended later
-const cardContainer = document.querySelector("#cardContainer");
+
 
 // opens modal window
-btnAddBook.addEventListener( "click", (event) => {
+btnAddBook.addEventListener("click", (event) => {
   main(event);
-})
+});
 
 btnCloseModal.addEventListener("click", (event) => {
   main(event);
-})
+});
 
 btnSubmitModal.addEventListener("click", (event) => {
   event.preventDefault();
-  main(event)
-})
+  main(event);
+});
 
 btnCancelModal.addEventListener("click", (event) => {
   event.preventDefault();
-  main(event)
-})
+  main(event);
+});
+
+// removes error message if user enters something
+inputTitle.addEventListener("input", (event) => {
+  resetInputErrorMessage(event);
+});
+
+inputAuthor.addEventListener("input", (event) => {
+  resetInputErrorMessage(event);
+});
 
 // prevents that number input gets to long
-inputPages.addEventListener("input", (event) => { 
+inputPages.addEventListener("input", (event) => {
   validateInputPages(event);
-
-})
+  resetInputErrorMessage(event);
+});
 
 // constructor function for creating book objects
 function Book(title, author, pages, read, id) {
@@ -46,23 +58,22 @@ function Book(title, author, pages, read, id) {
   this.author = author;
   this.pages = pages;
   this.read = read;
-  if(id === undefined) {
+  if (id === undefined) {
     this.id = self.crypto.randomUUID();
   } else {
     this.id = id;
   }
-  
+
   this.info = function () {
     return `Book Object Info: ${this.title} by ${this.author}, ${this.pages} pages ${this.read} id: ${this.id} `;
   };
 }
 
-Book.prototype.updateRead = function(progress) {
+Book.prototype.updateRead = function (progress) {
   console.log("Book.prototype.updateRead = function(progress)");
   this.read = progress;
-  console.log(this.title, this.author, this.pages , this.read);
-
-}
+  console.log(this.title, this.author, this.pages, this.read);
+};
 
 // function adds book objects to array myLibrary
 function addBookToLibrary(obj) {
@@ -73,54 +84,53 @@ function addBookToLibrary(obj) {
   storeDataInLocalStorage(myLibrary);
 }
 
-const createBookObj = ( (input) => {
+const createBookObj = (input) => {
   const book = new Book(input.title, input.author, input.pages, input.read);
   addBookToLibrary(book);
-})
+};
 
 const validateInputPages = (event) => {
   console.log("validateInputPages()");
   // prevent that input starts with a 0
-  if(event.target.value.startsWith('0')) {
+  if (event.target.value.startsWith("0")) {
     inputPages.value = event.target.value.substring(1);
   }
   //const position = event.target.selectionStart;
   // prevent that non digits are entered
   inputPages.value = event.target.value.replace(/[^0-9]/g, "");
-
-}
+};
 
 const getUserInput = () => {
   const inputData = {
     title: inputTitle.value,
     author: inputAuthor.value,
     pages: inputPages.value,
-    read: selectBookProgress.value
-  }
- 
-  const checkInputTitle = inputData.title !== "";
-  const checkInputAuthor = inputData.author !== "";
-  const checkInputPages = inputData.pages !== "";
-  if(checkInputTitle && checkInputAuthor && checkInputPages) {
+    read: selectBookProgress.value,
+  };
+
+  const checkInputTitle = inputData.title.trim() !== "";
+  const checkInputAuthor = inputData.author.trim() !== "";
+  const checkInputPages = inputData.pages.trim() !== "";
+  if (checkInputTitle && checkInputAuthor && checkInputPages) {
     return inputData;
   }
-  if(checkInputTitle === false) {
-    console.log("Enter something into title input");
+  if (checkInputTitle === false) {
+    errorInputTitle.textContent = "Title is required.";
   }
-  if(checkInputAuthor === false) {
-    console.log("Enter something into author input");
+  if (checkInputAuthor === false) {
+    errorInputAuthor.textContent = "Author is required.";
   }
-  if(checkInputPages === false) {
-    console.log("Enter something into pages input");
+  if (checkInputPages === false) {
+    errorInputPages.textContent = "Pages are required";
   }
   return false;
-}
+};
 
 const removeBookObjectFromData = (id) => {
   // remove card from dataset
   const myLibrary = getLocalStorageData();
-  for(let i = 0; i < myLibrary.length; i++) {
-    if(myLibrary[i].id === id) {
+  for (let i = 0; i < myLibrary.length; i++) {
+    if (myLibrary[i].id === id) {
       myLibrary.splice(i, 1);
     }
   }
@@ -129,20 +139,47 @@ const removeBookObjectFromData = (id) => {
 
 const getBookObject = (id) => {
   const myLibrary = getLocalStorageData();
-  const books = myLibrary.map(book => new Book(book.title, book.author, book.pages, book.read, book.id));
-  for(let i=0; i < books.length; i++) {
-    if(books[i].id === id) {
+  const books = myLibrary.map(
+    (book) => new Book(book.title, book.author, book.pages, book.read, book.id)
+  );
+  for (let i = 0; i < books.length; i++) {
+    if (books[i].id === id) {
       return books[i];
     }
   }
-}
+};
 
 const resetModal = () => {
   inputTitle.value = "";
   inputAuthor.value = "";
   inputPages.value = "";
   selectBookProgress.options[0].selected = true;
-}
+  errorInputTitle.textContent = "Input is required.";
+  errorInputAuthor.textContent = "Input is required.";
+  errorInputPages.textContent = "Input is required.";
+};
+
+const resetInputErrorMessage = (event) => {
+  if (event.target.value.length > 0) {
+    const inputId = event.target.id;
+    console.log(inputId);
+    switch (inputId) {
+      case "title":
+        errorInputTitle.textContent = "";
+        break;
+      case "author":
+        errorInputAuthor.textContent = "";
+        break;
+      case "pages":
+        errorInputPages.textContent = "";
+        break;
+      default:
+        console.log(
+          "Something went wrong! function resetInputErrorMessage, switch statement."
+        );
+    }
+  }
+};
 
 // creates cards from objects
 const displayCards = () => {
@@ -150,14 +187,14 @@ const displayCards = () => {
   const cards = document.querySelectorAll(".card");
   cards.forEach((card) => {
     card.remove();
-  })
+  });
   const myLibrary = getLocalStorageData();
   // iterate through array and call createCard for every book object to create a card
-  myLibrary.forEach( (book) => {
+  myLibrary.forEach((book) => {
     // call function to create a card
     createCard(book);
-  })
-}
+  });
+};
 
 // called from function displayCards
 const createCard = (book) => {
@@ -165,7 +202,7 @@ const createCard = (book) => {
   const divCard = document.createElement("div");
   divCard.classList.add("card");
   divCard.id = book.id;
-  
+
   // create div for title
   const divTitle = document.createElement("div");
   const pTitle = document.createElement("p");
@@ -198,7 +235,7 @@ const createCard = (book) => {
   pUserPages.textContent = `${book.pages}`;
   divPages.appendChild(pPages);
   divPages.appendChild(pUserPages);
-  
+
   // create div for read
   const divRead = document.createElement("div");
   const labelSelect = document.createElement("label");
@@ -213,14 +250,14 @@ const createCard = (book) => {
   select.classList.add("cardSelect");
   select.name = "progress";
   select.dataset.action = "selectProgress";
-  option1.value = "notYetRead";
+  option1.value = "notRead";
   option2.value = "inProgress";
   option3.value = "finished";
-  option1.text = "not yet read";
+  option1.text = "not read";
   option2.text = "in progress";
   option3.text = "finished";
   // use data to change gui
-  switch(book.read) {
+  switch (book.read) {
     case "notYetRead":
       option1.selected = true;
       break;
@@ -259,28 +296,28 @@ const createCard = (book) => {
 
   select.addEventListener("change", (event) => {
     main(event);
-  })
+  });
 
   // append eventlistener to button
   btnRemove.addEventListener("click", (event) => {
     main(event);
-  })
-}
+  });
+};
 
 const getLocalStorageData = () => {
-  console.log("getLocalStorageData()");
+  // console.log("getLocalStorageData()");
   return JSON.parse(localStorage.getItem("myLibrary"));
-
-}
+};
 
 const storeDataInLocalStorage = (value) => {
-  console.log("storeDataInLocalStorage");
-  console.log(Array.isArray(value));
-  if(!Array.isArray(value)) {
-    console.log(`$$ title: ${value.title} author: ${value.author} read: ${value.read} id: ${value.id}`);
+  // console.log("storeDataInLocalStorage");
+  if (!Array.isArray(value)) {
+    console.log(
+      `$$ title: ${value.title} author: ${value.author} read: ${value.read} id: ${value.id}`
+    );
     const myLibrary = getLocalStorageData();
-    for(let i=0; i < myLibrary.length; i++) {
-      if(myLibrary[i].id === value.id) {
+    for (let i = 0; i < myLibrary.length; i++) {
+      if (myLibrary[i].id === value.id) {
         console.log("book found inside myLibrary");
         myLibrary[i].read = value.read;
       }
@@ -289,29 +326,25 @@ const storeDataInLocalStorage = (value) => {
   } else {
     localStorage.setItem("myLibrary", JSON.stringify(value));
   }
-}
+};
 
 // main function
 const main = (event) => {
   const action = event.target.getAttribute("data-action");
-  if(action === "newBook") {
+  if (action === "newBook") {
     modalWindow.showModal();
-  }
-  else if(action === "closeModal" || action === "cancelModal") {
+  } else if (action === "closeModal" || action === "cancelModal") {
     resetModal();
     modalWindow.close();
-  }
-  else if(action === "submitModal") {
+  } else if (action === "submitModal") {
     const inputObj = getUserInput();
-    if(inputObj !== false) { 
+    if (inputObj !== false) {
       resetModal();
       modalWindow.close();
       createBookObj(inputObj);
       displayCards();
     }
-  }
-
-  else if(action === "selectProgress") {
+  } else if (action === "selectProgress") {
     const progress = event.target.value;
     const cardId = event.target.closest(".card").id;
     const book = getBookObject(cardId);
@@ -322,13 +355,12 @@ const main = (event) => {
     console.log("==================");
     console.log(getLocalStorageData());
     console.log("==================");
-  }
-  else if(action === "removeBook") {
+  } else if (action === "removeBook") {
     const cardId = event.target.closest(".card").id;
     removeBookObjectFromData(cardId);
     displayCards();
   }
-}
+};
 
 /* creating a few examples, so it doesn't look so boring */
 const createExamples = () => {
@@ -336,44 +368,44 @@ const createExamples = () => {
     title: "Lord of the Rings The Fellowship",
     author: "J.R.R. Tolkien",
     pages: 1546,
-    read: "notYetRead"
-  }
+    read: "notYetRead",
+  };
   const exampleBook2 = {
     title: "Lord of the Rings: The two Towers",
     author: "J.R.R. Tolkien",
     pages: 1678,
-    read: "inProgress"
-  }
+    read: "inProgress",
+  };
   const exampleBook3 = {
     title: "Lord of the Rings: Return of the King",
     author: "J.R.R. Tolkien",
     pages: 1102,
-    read: "finished"
-  }
+    read: "finished",
+  };
   const exampleBook4 = {
     title: 1984,
     author: "George Orwell",
     pages: 1102,
-    read: "notYetRead"
-  }
+    read: "notYetRead",
+  };
   const exampleBook5 = {
     title: "Romeo and Juliet",
     author: "William Shakespeare",
     pages: 425,
     read: "inProgress",
-  }
+  };
   const exampleBook6 = {
     title: "The Count of Monte Christo",
     author: "Alexandre Dumas",
     pages: 336,
     read: "finished",
-  }
+  };
   const exampleBook7 = {
     title: "It",
     author: "Stephen King",
     pages: 500,
     read: "notYetRead",
-  }
+  };
   createBookObj(exampleBook1);
   createBookObj(exampleBook2);
   createBookObj(exampleBook3);
@@ -382,12 +414,12 @@ const createExamples = () => {
   createBookObj(exampleBook6);
   createBookObj(exampleBook7);
   displayCards();
-}
+};
 
 const initializeData = () => {
   const myLibrary = [];
   localStorage.setItem("myLibrary", JSON.stringify(myLibrary));
-}
+};
 
 initializeData();
 createExamples();

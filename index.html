@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" >
-    <meta name="keywords" content="HTML, CSS, JavaScript" >
-    <meta name="author" content="Michael" >
-    <meta name="description" content="program for The Odin Project" >
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
-    <link rel="stylesheet" href="./styles.css" >
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" >
+    <meta charset="UTF-8" />
+    <meta name="keywords" content="HTML, CSS, JavaScript" />
+    <meta name="author" content="Michael" />
+    <meta name="description" content="program for The Odin Project" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
     <title>Library Second Version</title>
   </head>
 
@@ -21,47 +24,68 @@
           <div class="modalContent">
             <div class="modalContentHeader">
               <p>Add new book to library</p>
-              <button id="btnCloseModal" class="btn btnCloseModal" data-action="closeModal">X</button>
+              <button
+                id="btnCloseModal"
+                class="btn btnCloseModal"
+                data-action="closeModal"
+              >
+                X
+              </button>
             </div>
             <form method="dialog">
-
               <div class="modalDivTitle">
                 <label for="title">Title</label>
-                <input id="title" type="text" maxlength="40">
+                <input id="title" type="text" maxlength="40" />
+                <div class="error-message" id="errorInputTitle">Input is required.</div>
               </div>
 
               <div class="modalDivAuthor">
                 <label for="author">Author</label>
-                <input id="author" type="text" maxlength="40">
+                <input id="author" type="text" maxlength="40" />
+                <div class="error-message" id="errorInputAuthor">Input is required.</div>
               </div>
 
               <div class="modalDivPages">
                 <label for="pages">Pages</label>
-                <input id="pages" type="text" maxlength="15">
+                <input id="pages" type="text" maxlength="10" />
+                <div class="error-message" id="errorInputPages">Input is required.</div>
               </div>
-
               <div class="modalDivRead">
-                <label for="selectBookProgress">Book read?</label>
-                <select id="selectBookProgress" class="selectBookProgress" name="selectBookProgress">
-                  <option value="notYetRead" selected>not yet read</option>
+                <label for="selectBookProgress">Progress</label>
+                <select
+                  id="selectBookProgress"
+                  class="selectBookProgress"
+                  name="selectBookProgress"
+                >
+                  <option value="notRead" selected>not read</option>
                   <option value="inProgress">in progress</option>
                   <option value="finished">finished</option>
                 </select>
               </div>
 
               <div class="modalDivBtns">
-                <button id="btnSubmitModal" class="btn btnSubmitModal" data-action="submitModal">Submit</button>
-                <button id="btnCancelModal" class="btn btnCancelModal" data-action="cancelModal">Cancel</button>
+                <button
+                  id="btnSubmitModal"
+                  class="btn btnSubmitModal"
+                  data-action="submitModal"
+                >
+                  Submit
+                </button>
+                <button
+                  id="btnCancelModal"
+                  class="btn btnCancelModal"
+                  data-action="cancelModal"
+                >
+                  Cancel
+                </button>
               </div>
-
             </form>
           </div>
         </dialog>
       </header>
 
       <main>
-         <div id="cardContainer" class="cardContainer">
-        </div>
+        <div id="cardContainer" class="cardContainer"></div>
       </main>
 
       <footer>
