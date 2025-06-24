@@ -423,5 +423,3 @@ const initializeData = () => {
 
 initializeData();
 createExamples();
-
-/* implement media queries */

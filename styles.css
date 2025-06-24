@@ -17,11 +17,14 @@
     --font-size-text-card: 1.1rem; /* no input elements */
 }
 
-html, body {
-    height: 100%;
+html,
+body,
+.container {
+    min-height: 100vh;
 }
 
 .btn {
+    border: none;
     border-radius: 4px;
 }
 
@@ -39,33 +42,130 @@ a:hover {
     text-decoration: underline;
 }
 
+/* new design mobil first approach */
 .container {
     display: grid;
-    grid-template-rows: 120px 1fr 100px;
-    height: 100%;
+    justify-items: center;
+    grid-template-columns: 1fr;
+
+    color: var(--on-primary-color);
+    background-color: var(--primary-color);
 }
 
 header,
 main,
 footer {
-    padding: 1rem;
+    width: 100%;
 }
 
 header {
-    display: flex;
-    flex-direction: column;
-    row-gap: 10px;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    height: 100px;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid hsl(0, 0%, 100%);
     color: var(--on-primary-color);
     background-color: var(--primary-color);
-    border-bottom: 1px solid grey;
 }
 
 .btnAddBook {
-    width: 150px;;
-    height: 40px;
+    width: 50%;
+    height: 100%;
+}
+
+main {
+    color: var(--on-primary-color);
+    background-color: var(--primary-color)
+}
+
+.cardContainer {
+    display: grid;
+    justify-items: center;
+    row-gap: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.card {
+    display: grid;
+    align-items: center;
+    min-height: 220px;
+    width: 90%;
+    padding-bottom: 2px;
+    border: 1px solid grey;
+    border-radius: 4px;
+    color: var(--on-secondary-color);
+    background-color: var(--secondary-color);
+
+}
+
+.cardDivTitle,
+.cardDivAuthor,
+.cardDivPages,
+.cardDivRead {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    align-items: center;
+    height: 100%;
+    padding-left: 5px;
+    border-bottom: 1px solid grey;  
+}
+
+.cardDivRead {
+    border: none;
+}
+
+.cardSelect {
+    width: 50%;
+}
+
+.btnRemove {
+    width: 98%;
+    height: 100%;
+    justify-self: center;
+    align-self: center;
     border: 1px solid grey;
 }
 
+footer {
+    display: grid;
+    justify-items: center;
+    row-gap: 5px;
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+    border-top: 1px solid hsl(0, 0%, 100%);
+    color: var(--on-primary-color);
+    background-color: var(--primary-color)
+}
+
+footer ul {
+    display: grid;
+    justify-items: center;
+    row-gap: 2px;
+    list-style-type: none;
+}
+
+footer i {
+    margin-right: 2px;
+}
+
+.fa.fa-twitter {
+	font-family:sans-serif;
+}
+
+.fa.fa-twitter::before{
+	content:"𝕏";
+}
+
+
+footer div {
+    
+}
+
+/* modal window for user input */
 .modal {
     width: 400px;
     height: 310px;
@@ -113,7 +213,7 @@ header {
     display: grid;
     grid-template-rows: repeat(5, 1fr);
 }
-/* ======================================================================== */
+
 .modalDivTitle,
 .modalDivAuthor,
 .modalDivPages,
@@ -169,120 +269,44 @@ header {
     justify-self: end;
 }
 
-/* ======================================================================== */
+@media (min-width: 768px) {
+    .container {
+        border: 4px solid green;
+    }
 
-main {
-    color: var(--on-primary-color);
-    background-color: var(--primary-color);
-    border-bottom: 1px solid grey;
+    header {
+        justify-items: start;
+        padding-left: 2%;
+    }
+
+    .btnAddBook {
+        width: 20%;
+    }
+
+    .cardContainer {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    footer ul {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
 }
 
-.cardContainer {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 1rem;
-    height: 100%;
-}
+@media (min-width: 1024px) {
+    .container {
+        border: 4px solid red;
+    }
 
-.card {
-    display: grid;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    .cardContainer {
+        grid-template-columns: repeat(3, 1fr);
+    }
 
-    height: 250px;
-    width: 400px;
-    border-radius: 4px;
-    border: 1px solid black;
-    font-size: var(--font-size-text-card);
-    color: var(--on-secondary-color);
-    background-color: var(--secondary-color);
-}
+    footer {
+        grid-template-columns: 0.5fr 2fr 1fr;
+    }
 
-.cardDivTitle,
-.cardDivAuthor,
-.cardDivPages,
-.cardDivRead {
-    display: grid;
-    align-items: center;
-    grid-template-columns: 100px 1fr;
-    padding: 0 10px;
-}
-
-.cardDivTitle,
-.cardDivAuthor,
-.cardDivPages {
-    max-width: 400px;
-    word-wrap: break-word;
-}
-
-.pUserTitle,
-.pUserAuthor,
-.pUserPages {
-    overflow: hidden; 
-}
-   
-.cardDivTitle,
-.cardDivAuthor,
-.cardDivPages {
-    border-bottom: 1px solid grey;
-}
-
-.cardSelect {
-    width: 50%;
-    padding: 1px;
-}
-
-
-.btnRemove {
-    align-self: center;
-    justify-self: center;
-    width: 99%;
-    height: 90%;
-    border: 1px solid grey;
-}
-
-
-footer {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-
-    color: var(--on-primary-color);
-    background-color: var(--primary-color);
-}
-
-footer h3 {
-    grid-column: 1 / 3;
-}
-
-footer ul {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    list-style-type: none;
-}
-
-footer ul li {
-    min-width: 130px;
-    display: grid;
-    justify-items: start;
-}
-footer ul li:nth-child(2),
-footer ul li:nth-child(3),
-footer ul li:nth-child(4) {
-    display: grid;
-    justify-items: center;
-}
-
-footer ul span {
-    padding-left: 5px;
-}
-
-footer p {
-    justify-self: end;
-}
-
-.fa.fa-twitter {
-	font-family:sans-serif;
-}
-
-.fa.fa-twitter::before{
-	content:"𝕏";
+    footer ul {
+        justify-self: start;
+    }
 }
