@@ -14,7 +14,6 @@ const errorInputAuthor = document.querySelector("#errorInputAuthor");
 const errorInputPages = document.querySelector("#errorInputPages");
 const selectBookProgress = document.querySelector("#selectBookProgress");
 
-
 // opens modal window
 btnAddBook.addEventListener("click", (event) => {
   main(event);
@@ -77,10 +76,8 @@ Book.prototype.updateRead = function (progress) {
 
 // function adds book objects to array myLibrary
 function addBookToLibrary(obj) {
-  // get library
   const myLibrary = getLocalStorageData();
   myLibrary.push(obj);
-  // store information
   storeDataInLocalStorage(myLibrary);
 }
 
@@ -113,15 +110,6 @@ const getUserInput = () => {
   const checkInputPages = inputData.pages.trim() !== "";
   if (checkInputTitle && checkInputAuthor && checkInputPages) {
     return inputData;
-  }
-  if (checkInputTitle === false) {
-    errorInputTitle.textContent = "Title is required.";
-  }
-  if (checkInputAuthor === false) {
-    errorInputAuthor.textContent = "Author is required.";
-  }
-  if (checkInputPages === false) {
-    errorInputPages.textContent = "Pages are required";
   }
   return false;
 };
@@ -160,8 +148,9 @@ const resetModal = () => {
 };
 
 const resetInputErrorMessage = (event) => {
+  const inputId = event.target.id;
   if (event.target.value.length > 0) {
-    const inputId = event.target.id;
+    // user entered something, remove error message
     console.log(inputId);
     switch (inputId) {
       case "title":
@@ -177,6 +166,21 @@ const resetInputErrorMessage = (event) => {
         console.log(
           "Something went wrong! function resetInputErrorMessage, switch statement."
         );
+    }
+  } else {
+    // input element is empty again, insert error message
+    switch (inputId) {
+      case "title":
+        errorInputTitle.textContent = "Title is required.";
+        break;
+      case "author":
+        errorInputAuthor.textContent = "Author is required.";
+        break;
+      case "pages":
+        errorInputPages.textContent = "Pages are required."
+        break;
+      default:
+        console.log("Something went wrong! function resetInputErrorMessage, switch statement 2.")
     }
   }
 };
@@ -207,6 +211,7 @@ const createCard = (book) => {
   const divTitle = document.createElement("div");
   const pTitle = document.createElement("p");
   const pUserTitle = document.createElement("p");
+  pTitle.classList.add("pTitle");
   pUserTitle.classList.add("pUserTitle");
   divTitle.classList.add("cardDivTitle");
   pTitle.textContent = "Title:";
@@ -219,6 +224,7 @@ const createCard = (book) => {
   const pAuthor = document.createElement("p");
   const pUserAuthor = document.createElement("p");
   divAuthor.classList.add("cardDivAuthor");
+  pAuthor.classList.add("pAuthor");
   pUserAuthor.classList.add("pUserAuthor");
   pAuthor.textContent = "Author:";
   pUserAuthor.textContent = `${book.author}`;
@@ -230,6 +236,7 @@ const createCard = (book) => {
   const pPages = document.createElement("p");
   const pUserPages = document.createElement("p");
   divPages.classList.add("cardDivPages");
+  pPages.classList.add("pPages");
   pUserPages.classList.add("pUserPages");
   pPages.textContent = "Pages:";
   pUserPages.textContent = `${book.pages}`;
@@ -244,6 +251,7 @@ const createCard = (book) => {
   const option2 = document.createElement("option");
   const option3 = document.createElement("option");
   divRead.classList.add("cardDivRead");
+  labelSelect.classList.add("labelSelect");
   labelSelect.htmlFor = `cardSelect-${book.id}`;
   labelSelect.textContent = "Book read?";
   select.id = `cardSelect-${book.id}`;
