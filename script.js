@@ -87,7 +87,6 @@ const createBookObj = (input) => {
 };
 
 const validateInputPages = (event) => {
-  console.log("validateInputPages()");
   // prevent that input starts with a 0
   if (event.target.value.startsWith("0")) {
     inputPages.value = event.target.value.substring(1);
@@ -356,13 +355,8 @@ const main = (event) => {
     const progress = event.target.value;
     const cardId = event.target.closest(".card").id;
     const book = getBookObject(cardId);
-    // console.log(book);
-    // console.log(progress);
     book.updateRead(progress);
     storeDataInLocalStorage(book);
-    console.log("==================");
-    console.log(getLocalStorageData());
-    console.log("==================");
   } else if (action === "removeBook") {
     const cardId = event.target.closest(".card").id;
     removeBookObjectFromData(cardId);
