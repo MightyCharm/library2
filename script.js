@@ -62,7 +62,7 @@ class Book {
   }
   info() {
     return `Book Object Info: ${this.title} by ${this.author}, ${this.pages} pages ${this.read} id: ${this.id} `;
-  };
+  }
 
   updateRead(progress) {
     // console.log("Book.prototype.updateRead = function(progress)");
@@ -73,7 +73,10 @@ class Book {
 
 // function adds book objects to array myLibrary
 function addBookToLibrary(obj) {
-  const myLibrary = getLocalStorageData();
+  let myLibrary = getLocalStorageData();
+  if(!myLibrary) {
+    myLibrary = [];
+  }
   myLibrary.push(obj);
   storeDataInLocalStorage(myLibrary);
 }
@@ -147,7 +150,6 @@ const resetInputErrorMessage = (event) => {
   const inputId = event.target.id;
   if (event.target.value.length > 0) {
     // user entered something, remove error message
-    console.log(inputId);
     switch (inputId) {
       case "title":
         errorInputTitle.textContent = "";
@@ -190,6 +192,7 @@ const displayCards = () => {
   cards.forEach((card) => {
     card.remove();
   });
+
   const myLibrary = getLocalStorageData();
   // iterate through array and call createCard for every book object to create a card
   myLibrary.forEach((book) => {
@@ -264,7 +267,7 @@ const createCard = (book) => {
   option3.text = "finished";
   // use data to change gui
   switch (book.read) {
-    case "notYetRead":
+    case "notRead":
       option1.selected = true;
       break;
     case "inProgress":
@@ -274,7 +277,9 @@ const createCard = (book) => {
       option3.selected = true;
       break;
     default:
-      console.log("Error: something went wrong in switch statement");
+      console.log(
+        "Error: something went wrong in switch statement (createCard)"
+      );
       break;
   }
 
@@ -311,12 +316,10 @@ const createCard = (book) => {
 };
 
 const getLocalStorageData = () => {
-  // console.log("getLocalStorageData()");
   return JSON.parse(localStorage.getItem("myLibrary"));
 };
 
 const storeDataInLocalStorage = (value) => {
-  // console.log("storeDataInLocalStorage");
   if (!Array.isArray(value)) {
     console.log(
       `$$ title: ${value.title} author: ${value.author} read: ${value.read} id: ${value.id}`
@@ -369,7 +372,7 @@ const createExamples = () => {
     title: "Lord of the Rings The Fellowship",
     author: "J.R.R. Tolkien",
     pages: 1546,
-    read: "notYetRead",
+    read: "notRead",
   };
   const exampleBook2 = {
     title: "Lord of the Rings: The two Towers",
@@ -387,7 +390,7 @@ const createExamples = () => {
     title: 1984,
     author: "George Orwell",
     pages: 1102,
-    read: "notYetRead",
+    read: "notRead",
   };
   const exampleBook5 = {
     title: "Romeo and Juliet",
@@ -405,7 +408,7 @@ const createExamples = () => {
     title: "It",
     author: "Stephen King",
     pages: 500,
-    read: "notYetRead",
+    read: "notRead",
   };
   createBookObj(exampleBook1);
   createBookObj(exampleBook2);
@@ -418,9 +421,11 @@ const createExamples = () => {
 };
 
 const initializeData = () => {
-  const myLibrary = [];
-  localStorage.setItem("myLibrary", JSON.stringify(myLibrary));
+  if (!getLocalStorageData()) {
+    createExamples();
+  }
+  
 };
 
 initializeData();
-createExamples();
+displayCards();
