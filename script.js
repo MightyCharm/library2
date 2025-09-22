@@ -48,31 +48,28 @@ inputPages.addEventListener("input", (event) => {
   resetInputErrorMessage(event);
 });
 
-// constructor function for creating book objects
-function Book(title, author, pages, read, id) {
-  if (!new.target) {
-    throw Error("You must use the 'new' operator to call the constructor");
+class Book {
+  constructor(title, author, pages, read, id) {
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.read = read;
+    if (id === undefined) {
+      this.id = self.crypto.randomUUID();
+    } else {
+      this.id = id;
+    }
   }
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.read = read;
-  if (id === undefined) {
-    this.id = self.crypto.randomUUID();
-  } else {
-    this.id = id;
-  }
-
-  this.info = function () {
+  info() {
     return `Book Object Info: ${this.title} by ${this.author}, ${this.pages} pages ${this.read} id: ${this.id} `;
   };
-}
 
-Book.prototype.updateRead = function (progress) {
-  console.log("Book.prototype.updateRead = function(progress)");
-  this.read = progress;
-  console.log(this.title, this.author, this.pages, this.read);
-};
+  updateRead(progress) {
+    // console.log("Book.prototype.updateRead = function(progress)");
+    this.read = progress;
+    console.log(this.title, this.author, this.pages, this.read);
+  }
+}
 
 // function adds book objects to array myLibrary
 function addBookToLibrary(obj) {
@@ -176,10 +173,12 @@ const resetInputErrorMessage = (event) => {
         errorInputAuthor.textContent = "Author is required.";
         break;
       case "pages":
-        errorInputPages.textContent = "Pages are required."
+        errorInputPages.textContent = "Pages are required.";
         break;
       default:
-        console.log("Something went wrong! function resetInputErrorMessage, switch statement 2.")
+        console.log(
+          "Something went wrong! function resetInputErrorMessage, switch statement 2."
+        );
     }
   }
 };
