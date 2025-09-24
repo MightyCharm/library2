@@ -203,12 +203,13 @@ const displayCards = () => {
 
 // called from function displayCards
 const createCard = (book) => {
-  // create card
   const divCard = document.createElement("div");
   divCard.classList.add("card");
   divCard.id = book.id;
 
-  // create div for title
+  const divSeparator = document.createElement("div");
+  divSeparator.classList.add("divSeparator");
+
   const divTitle = document.createElement("div");
   const pTitle = document.createElement("p");
   const pUserTitle = document.createElement("p");
@@ -220,7 +221,6 @@ const createCard = (book) => {
   divTitle.appendChild(pTitle);
   divTitle.appendChild(pUserTitle);
 
-  // create div for author
   const divAuthor = document.createElement("div");
   const pAuthor = document.createElement("p");
   const pUserAuthor = document.createElement("p");
@@ -232,7 +232,6 @@ const createCard = (book) => {
   divAuthor.appendChild(pAuthor);
   divAuthor.appendChild(pUserAuthor);
 
-  // create div for pages
   const divPages = document.createElement("div");
   const pPages = document.createElement("p");
   const pUserPages = document.createElement("p");
@@ -244,7 +243,6 @@ const createCard = (book) => {
   divPages.appendChild(pPages);
   divPages.appendChild(pUserPages);
 
-  // create div for read
   const divRead = document.createElement("div");
   const labelSelect = document.createElement("label");
   const select = document.createElement("select");
@@ -277,9 +275,9 @@ const createCard = (book) => {
       option3.selected = true;
       break;
     default:
-      console.log(
-        "Error: something went wrong in switch statement (createCard)"
-      );
+      console.warn(
+        "Unknown read status: ", book.read);
+      option1.selected = true;
       break;
   }
 
@@ -289,20 +287,18 @@ const createCard = (book) => {
   divRead.appendChild(labelSelect);
   divRead.appendChild(select);
 
-  // create button remove
   const btnRemove = document.createElement("button");
   btnRemove.textContent = "REMOVE";
-  btnRemove.classList.add("btn");
-  btnRemove.classList.add("btnRemove");
+  btnRemove.classList.add("btn", "btnRemove");
   btnRemove.dataset.action = "removeBook";
 
-  // append everything to divCard
+  divCard.append(divSeparator);
   divCard.appendChild(divTitle);
   divCard.appendChild(divAuthor);
   divCard.appendChild(divPages);
   divCard.appendChild(divRead);
   divCard.appendChild(btnRemove);
-  // append divCard to cardContainer
+  
   cardContainer.appendChild(divCard);
 
   select.addEventListener("change", (event) => {
