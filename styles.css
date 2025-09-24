@@ -28,6 +28,7 @@
 body,
 .card,
 .modal,
+.cardSelect,
 button,
 input {
   font-family: 'Montserrat', sans-serif;
@@ -162,6 +163,7 @@ header {
 }
 
 .cardSelect {
+  min-width: 100px;
   width: 50%;
   border-radius: 4px;
   padding-top: 1px;

@@ -74,7 +74,7 @@ class Book {
 // function adds book objects to array myLibrary
 function addBookToLibrary(obj) {
   let myLibrary = getLocalStorageData();
-  if(!myLibrary) {
+  if (!myLibrary) {
     myLibrary = [];
   }
   myLibrary.push(obj);
@@ -275,8 +275,7 @@ const createCard = (book) => {
       option3.selected = true;
       break;
     default:
-      console.warn(
-        "Unknown read status: ", book.read);
+      console.warn("Unknown read status: ", book.read);
       option1.selected = true;
       break;
   }
@@ -298,7 +297,7 @@ const createCard = (book) => {
   divCard.appendChild(divPages);
   divCard.appendChild(divRead);
   divCard.appendChild(btnRemove);
-  
+
   cardContainer.appendChild(divCard);
 
   select.addEventListener("change", (event) => {
@@ -333,7 +332,6 @@ const storeDataInLocalStorage = (value) => {
   }
 };
 
-// main function
 const main = (event) => {
   const action = event.target.getAttribute("data-action");
   if (action === "newBook") {
@@ -356,9 +354,10 @@ const main = (event) => {
     book.updateRead(progress);
     storeDataInLocalStorage(book);
   } else if (action === "removeBook") {
-    const cardId = event.target.closest(".card").id;
+    const card = event.target.closest(".card");
+    const cardId = card.id;
     removeBookObjectFromData(cardId);
-    displayCards();
+    card.remove();
   }
 };
 
@@ -420,7 +419,6 @@ const initializeData = () => {
   if (!getLocalStorageData()) {
     createExamples();
   }
-  
 };
 
 initializeData();
