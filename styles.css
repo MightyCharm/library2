@@ -57,6 +57,7 @@ a:hover {
   display: grid;
   justify-items: center;
   grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
   color: var(--on-primary-color, hsl(0, 0%, 100%));
   background-color: var(--primary-color, hsl(220, 4%, 17%));
 }
@@ -71,9 +72,10 @@ header {
   display: grid;
   justify-items: center;
   align-items: center;
+  gap: 0.5rem;
   position: sticky;
   top: 0;
-  height: 100px;
+  padding-top: 1rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--col-border2, hsl(0, 0%, 100%));
   background-color: var(--primary-color, hsl(220, 4%, 17%));
@@ -187,15 +189,16 @@ footer {
   justify-items: center;
   align-items: center;
   row-gap: 5px;
-  padding-top: 0.5rem;
+  padding-top: 1rem;
 
-  padding-bottom: 0.5rem;
+  padding-bottom: 1rem;
   border-top: 1px solid var(--col-border2, hsl(0, 0%, 100%));
 }
 
 footer ul {
   display: grid;
   justify-items: center;
+  align-items: center;
   row-gap: 2px;
   list-style-type: none;
 }
@@ -213,8 +216,8 @@ footer i {
 }
 
 .img-solo-learn {
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
 }
 
 .modal {
