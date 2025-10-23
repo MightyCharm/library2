@@ -1,6 +1,10 @@
 {
     "conventionalCommits.scopes": [
         "ui",
-        "Book"
+        "Book",
+        "footer"
+    ],
+    "cSpell.ignoreWords": [
+        "sololearn"
     ]
 }

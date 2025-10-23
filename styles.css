@@ -212,6 +212,11 @@ footer i {
   content: "𝕏";
 }
 
+.img-solo-learn {
+  width: 20px;
+  height: 20px;
+}
+
 .modal {
   width: 400px;
   height: 310px;
