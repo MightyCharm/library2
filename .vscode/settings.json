@@ -1,11 +1,10 @@
 {
-    "conventionalCommits.scopes": [
-        "ui",
-        "Book",
-        "footer",
-        "layout"
-    ],
-    "cSpell.ignoreWords": [
-        "sololearn"
-    ]
+  "conventionalCommits.scopes": [
+    "ui",
+    "Book",
+    "footer",
+    "layout",
+    "validation"
+  ],
+  "cSpell.ignoreWords": ["sololearn"]
 }

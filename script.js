@@ -148,8 +148,7 @@ const resetModal = () => {
 
 const resetInputErrorMessage = (event) => {
   const inputId = event.target.id;
-  if (event.target.value.length > 0) {
-    // user entered something, remove error message
+  if (event.target.checkValidity()) {
     switch (inputId) {
       case "title":
         errorInputTitle.textContent = "";

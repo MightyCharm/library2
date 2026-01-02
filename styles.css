@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap");
 
 * {
   margin: 0;
@@ -31,22 +31,13 @@ body,
 .cardSelect,
 button,
 input {
-  font-family: 'Montserrat', sans-serif;
-} 
+  font-family: "Montserrat", sans-serif;
+}
 
 html,
 body,
 .container {
   min-height: 100vh;
-}
-
-a {
-  color: var(--on-primary-color, hsl(0, 0%, 100%));
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
 }
 
 .cardSelect:hover {
@@ -96,7 +87,7 @@ header {
   min-height: 30px;
   background-color: hsl(0, 0%, 81%);
   font-weight: bold;
-  border: none; 
+  border: none;
 }
 
 .cardContainer {
@@ -133,12 +124,11 @@ header {
 .divSeparator {
   grid-column: 1 / 2;
   grid-row: 1 / 5;
-  
+
   border: 1px solid var(--col-border);
   height: 100%;
   width: 0%;
 }
-
 
 .cardDivTitle,
 .cardDivAuthor,
@@ -199,12 +189,21 @@ footer ul {
   display: grid;
   justify-items: center;
   align-items: center;
-  row-gap: 2px;
+  gap: 2px;
   list-style-type: none;
 }
 
-footer i {
-  margin-right: 2px;
+.footer-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  color: var(--on-primary-color, hsl(0, 0%, 100%));
+  text-decoration: none;
+}
+
+.footer-link > span:hover {
+  text-decoration: underline;
 }
 
 .fa.fa-twitter {

@@ -35,7 +35,7 @@
             <form method="dialog">
               <div class="modalDivTitle">
                 <label for="title">Title</label>
-                <input id="title" type="text" maxlength="40" />
+                <input id="title" type="text" maxlength="40" required />
                 <div class="error-message" id="errorInputTitle">
                   Title is required.
                 </div>
@@ -43,7 +43,7 @@
 
               <div class="modalDivAuthor">
                 <label for="author">Author</label>
-                <input id="author" type="text" maxlength="40" />
+                <input id="author" type="text" maxlength="40" required />
                 <div class="error-message" id="errorInputAuthor">
                   Author is required.
                 </div>
@@ -51,7 +51,7 @@
 
               <div class="modalDivPages">
                 <label for="pages">Pages</label>
-                <input id="pages" type="text" maxlength="10" />
+                <input id="pages" type="text" maxlength="10" required />
                 <div class="error-message" id="errorInputPages">
                   Pages are required.
                 </div>
@@ -99,6 +99,7 @@
         <ul>
           <li>
             <a
+              class="footer-link"
               href="https://www.freecodecamp.org/MightyCharm"
               target="_blank"
               rel="noopener"
@@ -107,6 +108,7 @@
           </li>
           <li>
             <a
+              class="footer-link"
               href="https://github.com/MightyCharm"
               target="_blank"
               rel="noopener"
@@ -114,12 +116,17 @@
             >
           </li>
           <li>
-            <a href="https://x.com/Michael_1800" target="_blank" rel="noopener"
+            <a
+              class="footer-link"
+              href="https://x.com/Michael_1800"
+              target="_blank"
+              rel="noopener"
               ><i class="fa fa-twitter"></i><span>Twitter X</span></a
             >
           </li>
           <li>
             <a
+              class="footer-link"
               href="https://www.sololearn.com/de/profile/25075522"
               target="_blank"
               rel="noopener"
@@ -134,8 +141,8 @@
         </ul>
 
         <div>
-          <span>written by Michael</span>
           <span>©The Odin Project 2025</span>
+          <span>written by Michael</span>
         </div>
       </footer>
     </div>
